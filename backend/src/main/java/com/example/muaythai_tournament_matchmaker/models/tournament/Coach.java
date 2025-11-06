@@ -10,9 +10,10 @@ public class Coach {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "identity_id")
     @NotNull(message = "Identity is required")
     private Identity identity;
 
@@ -25,22 +26,18 @@ public class Coach {
 
     public Coach(){};
 
-    public Coach(Integer id, Identity identity, Gym gym, String profilePicture) {
+    public Coach(Long id, Identity identity, Gym gym, String profilePicture) {
         this.id = id;
         this.identity = identity;
         this.gym = gym;
         this.profilePicture = profilePicture;
     }
 
-    public String getName() {
-        return identity != null ? identity.getFirstName() + " " + identity.getLastName() : null;
-    }
-
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

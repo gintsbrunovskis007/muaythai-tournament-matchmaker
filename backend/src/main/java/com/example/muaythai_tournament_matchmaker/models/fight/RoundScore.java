@@ -17,7 +17,7 @@ public class RoundScore {
     @ManyToOne
     @JoinColumn(name = "scorecard_id", nullable = false)
     @NotNull(message = "Scorecard is required")
-    private Scorecard scorecard;
+    private ScoreCard scorecard;
     
     @Column(nullable = false)
     @NotNull(message = "Round number is required")
@@ -35,7 +35,9 @@ public class RoundScore {
     @Max(value = 10, message = "Score must not exceed 10")
     private Integer score;
 
-    public RoundScore(Long id, Scorecard scorecard, Integer roundNumber, Corner fighterCorner, Integer score) {
+    public RoundScore(){};
+
+    public RoundScore(Long id, ScoreCard scorecard, Integer roundNumber, Corner fighterCorner, Integer score) {
         this.id = id;
         this.scorecard = scorecard;
         this.roundNumber = roundNumber;
@@ -51,11 +53,11 @@ public class RoundScore {
         this.id = id;
     }
 
-    public @NotNull(message = "Scorecard is required") Scorecard getScorecard() {
+    public @NotNull(message = "Scorecard is required") ScoreCard getScorecard() {
         return scorecard;
     }
 
-    public void setScorecard(@NotNull(message = "Scorecard is required") Scorecard scorecard) {
+    public void setScorecard(@NotNull(message = "Scorecard is required") ScoreCard scorecard) {
         this.scorecard = scorecard;
     }
 

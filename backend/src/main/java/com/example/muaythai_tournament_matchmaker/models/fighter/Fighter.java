@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.example.muaythai_tournament_matchmaker.models.tournament.Gym;
 import com.example.muaythai_tournament_matchmaker.models.fight.Fight;
+import com.example.muaythai_tournament_matchmaker.models.tournament.Statistics;
 import com.example.muaythai_tournament_matchmaker.models.tournament.WeightClass;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -22,17 +23,14 @@ public class Fighter {
     @NotNull(message = "Identity is required")
     private Identity identity;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "fighter_image_id")
+    @Embedded
     private FighterImage fighterImage;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "body_id")
+    @Embedded
     @NotNull(message = "Body measurements are required")
     private Body body;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "fighter_record_id")
+    @Embedded
     private Record fightRecord;
 
     @ManyToOne
@@ -45,20 +43,26 @@ public class Fighter {
     @OneToMany(mappedBy = "blueCorner")
     private List<Fight> blueCornerFights = new ArrayList<>();
 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "statistics_id")
+    private Statistics statistics;
+
     @Enumerated(EnumType.STRING)
     private WeightClass weightClass;
 
     public Fighter(){};
 
-    public List<Fight> getAllFights() {
-        List<Fight> allFights = new ArrayList<>();
-        allFights.addAll(redCornerFights);
-        allFights.addAll(blueCornerFights);
-        return allFights;
-    }
-
-    public String getName() {
-        return identity != null ? identity.getFirstName() + " " + identity.getLastName() : null;
+    public Fighter(Long id, Identity identity, FighterImage fighterImage, Body body, Record fightRecord, Gym gym, List<Fight> redCornerFights, List<Fight> blueCornerFights, Statistics statistics, WeightClass weightClass) {
+        this.id = id;
+        this.identity = identity;
+        this.fighterImage = fighterImage;
+        this.body = body;
+        this.fightRecord = fightRecord;
+        this.gym = gym;
+        this.redCornerFights = redCornerFights;
+        this.blueCornerFights = blueCornerFights;
+        this.statistics = statistics;
+        this.weightClass = weightClass;
     }
 
     public Long getId() {
@@ -69,11 +73,11 @@ public class Fighter {
         this.id = id;
     }
 
-    public Identity getIdentity() {
+    public @NotNull(message = "Identity is required") Identity getIdentity() {
         return identity;
     }
 
-    public void setIdentity(Identity identity) {
+    public void setIdentity(@NotNull(message = "Identity is required") Identity identity) {
         this.identity = identity;
     }
 
@@ -85,11 +89,11 @@ public class Fighter {
         this.fighterImage = fighterImage;
     }
 
-    public Body getBody() {
+    public @NotNull(message = "Body measurements are required") Body getBody() {
         return body;
     }
 
-    public void setBody(Body body) {
+    public void setBody(@NotNull(message = "Body measurements are required") Body body) {
         this.body = body;
     }
 
@@ -123,5 +127,21 @@ public class Fighter {
 
     public void setBlueCornerFights(List<Fight> blueCornerFights) {
         this.blueCornerFights = blueCornerFights;
+    }
+
+    public Statistics getStatistics() {
+        return statistics;
+    }
+
+    public void setStatistics(Statistics statistics) {
+        this.statistics = statistics;
+    }
+
+    public WeightClass getWeightClass() {
+        return weightClass;
+    }
+
+    public void setWeightClass(WeightClass weightClass) {
+        this.weightClass = weightClass;
     }
 }

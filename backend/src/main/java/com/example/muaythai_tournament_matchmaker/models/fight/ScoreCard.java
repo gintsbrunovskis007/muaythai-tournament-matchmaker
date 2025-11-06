@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "scorecards")
-public class Scorecard {
+public class ScoreCard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +37,9 @@ public class Scorecard {
     @Column(name = "total_score_blue")
     private Integer totalScoreBlue;
 
-    public Scorecard(Long id, Fight fight, Judge judge, List<RoundScore> roundScores, String comments, Integer totalScoreRed, Integer totalScoreBlue) {
+    public ScoreCard(){};
+
+    public ScoreCard(Long id, Fight fight, Judge judge, List<RoundScore> roundScores, String comments, Integer totalScoreRed, Integer totalScoreBlue) {
         this.id = id;
         this.fight = fight;
         this.judge = judge;
@@ -70,6 +72,9 @@ public class Scorecard {
 
     public Corner getWinnerCorner() {
         if (totalScoreRed == null || totalScoreBlue == null) {
+            if (roundScores == null || roundScores.isEmpty()) {
+                return null;
+            }
             calculateTotalScores();
         }
         if (totalScoreRed > totalScoreBlue) {

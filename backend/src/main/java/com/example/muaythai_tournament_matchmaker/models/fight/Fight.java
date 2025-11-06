@@ -10,6 +10,7 @@ import com.example.muaythai_tournament_matchmaker.models.tournament.Statistics;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "fights")
@@ -17,7 +18,7 @@ public class Fight {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "event_id", nullable = false)
@@ -36,6 +37,7 @@ public class Fight {
 
     @OneToOne
     @JoinColumn(name = "referee_id")
+    @NotNull(message = "Referee is required")
     private Referee referee;
 
     @ManyToMany
@@ -44,6 +46,7 @@ public class Fight {
             joinColumns = @JoinColumn(name = "fight_id"),
             inverseJoinColumns = @JoinColumn(name = "judge_id")
     )
+    @Size(min = 3, max = 3, message = "Must have exactly 3 judges")
     private List<Judge> judges = new ArrayList<>();
 
     @ManyToOne
@@ -78,11 +81,11 @@ public class Fight {
     private Double finishTime;
 
     @OneToMany(mappedBy = "fight", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Scorecard> scorecards = new ArrayList<>();
+    private List<ScoreCard> scorecards = new ArrayList<>();
 
     public Fight(){};
 
-    public Fight(Integer id, Event event, Fighter redCorner, Fighter blueCorner, Fighter winner, Result result, Method method, Integer totalRounds, Integer roundFinished, Double finishTime, List<Scorecard> scorecards) {
+    public Fight(Long id, Event event, Fighter redCorner, Fighter blueCorner, Fighter winner, Result result, Method method, Integer totalRounds, Integer roundFinished, Double finishTime, List<ScoreCard> scorecards) {
         this.id = id;
         this.event = event;
         this.redCorner = redCorner;
@@ -108,12 +111,12 @@ public class Fight {
         return null;
     }
 
-    public void addScorecard(Scorecard scorecard) {
+    public void addScorecard(ScoreCard scorecard) {
         scorecards.add(scorecard);
         scorecard.setFight(this);
     }
 
-    public void removeScorecard(Scorecard scorecard) {
+    public void removeScorecard(ScoreCard scorecard) {
         scorecards.remove(scorecard);
         scorecard.setFight(null);
     }
@@ -125,8 +128,9 @@ public class Fight {
 
         int redWins = 0;
         int blueWins = 0;
+        int draws = 0;
 
-        for (Scorecard scorecard : scorecards) {
+        for (ScoreCard scorecard : scorecards) {
             scorecard.calculateTotalScores();
             Corner winnerCorner = scorecard.getWinnerCorner();
 
@@ -134,26 +138,40 @@ public class Fight {
                 redWins++;
             } else if (winnerCorner == Corner.BLUE) {
                 blueWins++;
+            } else {
+                draws++;
             }
         }
 
         if (redWins > blueWins) {
             this.winner = redCorner;
-            this.result = (redWins == scorecards.size()) ? Result.UNANIMOUS_DECISION : Result.SPLIT_DECISION;
+            if (redWins == scorecards.size()) {
+                this.result = Result.UNANIMOUS_DECISION;
+            } else if (redWins == blueWins + 1 && draws > 0) {
+                this.result = Result.MAJORITY_DECISION;
+            } else {
+                this.result = Result.SPLIT_DECISION;
+            }
         } else if (blueWins > redWins) {
             this.winner = blueCorner;
-            this.result = (blueWins == scorecards.size()) ? Result.UNANIMOUS_DECISION : Result.SPLIT_DECISION;
+            if (blueWins == scorecards.size()) {
+                this.result = Result.UNANIMOUS_DECISION;
+            } else if (blueWins == redWins + 1 && draws > 0) {
+                this.result = Result.MAJORITY_DECISION;
+            } else {
+                this.result = Result.SPLIT_DECISION;
+            }
         } else {
             this.winner = null;
             this.result = Result.DRAW;
         }
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -229,11 +247,11 @@ public class Fight {
         this.finishTime = finishTime;
     }
 
-    public List<Scorecard> getScorecards() {
+    public List<ScoreCard> getScorecards() {
         return scorecards;
     }
 
-    public void setScorecards(List<Scorecard> scorecards) {
+    public void setScorecards(List<ScoreCard> scorecards) {
         this.scorecards = scorecards;
     }
 

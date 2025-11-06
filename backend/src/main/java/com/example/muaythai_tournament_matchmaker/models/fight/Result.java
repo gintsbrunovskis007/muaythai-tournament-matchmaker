@@ -2,7 +2,6 @@ package com.example.muaythai_tournament_matchmaker.models.fight;
 
 import jakarta.persistence.Embeddable;
 
-@Embeddable
 public enum Result {
     UNANIMOUS_DECISION,
     SPLIT_DECISION,
@@ -12,5 +11,6 @@ public enum Result {
     TKO,
     SUBMISSION,
     DISQUALIFICATION,
-    NO_CONTEST
+    NO_CONTEST;
+
 }

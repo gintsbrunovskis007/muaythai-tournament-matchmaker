@@ -4,13 +4,8 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
-@Entity
-@Table(name = "bodies")
+@Embeddable
 public class Body {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @Column(precision = 5, scale = 2)
     private BigDecimal weight;
@@ -22,7 +17,7 @@ public class Body {
     private BigDecimal wingspan;
 
     @Column(precision = 5, scale = 2)
-    private BigDecimal leg_reach;
+    private BigDecimal legReach;
 
     public Body(){};
 
@@ -30,7 +25,7 @@ public class Body {
         this.weight = weight;
         this.height = height;
         this.wingspan = wingspan;
-        this.leg_reach = leg_reach;
+        this.legReach = legReach;
     }
 
     public BigDecimal getWeight() {
@@ -58,10 +53,10 @@ public class Body {
     }
 
     public BigDecimal getLeg_reach() {
-        return leg_reach;
+        return legReach;
     }
 
     public void setLeg_reach(BigDecimal leg_reach) {
-        this.leg_reach = leg_reach;
+        this.legReach = leg_reach;
     }
 }

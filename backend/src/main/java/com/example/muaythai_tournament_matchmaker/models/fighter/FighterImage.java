@@ -2,17 +2,17 @@ package com.example.muaythai_tournament_matchmaker.models.fighter;
 
 import jakarta.persistence.*;
 
-@Entity
-@Table(name = "fighter_images")
+@Embeddable
 public class FighterImage{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "full_height_image", length = 500)
+    private String fullHeightImage;
 
-    String fullHeightImage;
-    String headToWaistImage;
-    String closeUpImage;
+    @Column(name = "head_to_waist_image", length = 500)
+    private String headToWaistImage;
+
+    @Column(name = "close_up_image", length = 500)
+    private String closeUpImage;
 
     public FighterImage(){};
 

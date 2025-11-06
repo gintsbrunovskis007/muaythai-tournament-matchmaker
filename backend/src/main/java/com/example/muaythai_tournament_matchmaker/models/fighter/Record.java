@@ -1,14 +1,9 @@
 package com.example.muaythai_tournament_matchmaker.models.fighter;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Embeddable;
 
-@Entity
-@Table(name = "records")
+@Embeddable
 public class Record {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     private int wins;
     private int losses;

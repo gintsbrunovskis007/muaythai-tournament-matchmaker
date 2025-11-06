@@ -1,26 +1,9 @@
-package com.example.muaythai_tournament_matchmaker.models.tournament;
+package com.example.muaythai_tournament_matchmaker.modules.dtos.tournament;
 
-import com.example.muaythai_tournament_matchmaker.models.fight.Fight;
-import com.example.muaythai_tournament_matchmaker.models.fighter.Fighter;
-import jakarta.persistence.*;
+public class StatisticsDTO {
 
-@Entity
-@Table(name = "statistics", uniqueConstraints =
-@UniqueConstraint(columnNames = {"fighter_id", "fight_id"})
-)
-public class Statistics {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "fighter_id")
-    private Fighter fighter;
-
-    @ManyToOne
-    @JoinColumn(name = "fight_id")
-    private Fight fight;
+    private Long fighterId;
+    private Long fightId;
 
     private int punchesAttempted;
     private int punchesLanded;
@@ -50,12 +33,11 @@ public class Statistics {
     private int clinchControlTime;
     private int fouls;
 
-    public Statistics(){};
+    public StatisticsDTO(){};
 
-    public Statistics(Long id, Fighter fighter, Fight fight, int punchesAttempted, int punchesLanded, int kicksAttempted, int kicksLanded, int elbowAttempted, int elbowLanded, int kneeAttempted, int kneeLanded, int headStrikesAttempted, int headStrikesLanded, int bodyStrikesAttempted, int bodyStrikesLanded, int legStrikesAttempted, int legStrikesLanded, int knockDowns, int knockOuts, int technicalKnockOuts, int clinchControlTime, int fouls) {
-        this.id = id;
-        this.fighter = fighter;
-        this.fight = fight;
+    public StatisticsDTO(Long fighterId, Long fightId, int punchesAttempted, int punchesLanded, int kicksAttempted, int kicksLanded, int elbowAttempted, int elbowLanded, int kneeAttempted, int kneeLanded, int headStrikesAttempted, int headStrikesLanded, int bodyStrikesAttempted, int bodyStrikesLanded, int legStrikesAttempted, int legStrikesLanded, int knockDowns, int knockOuts, int technicalKnockOuts, int clinchControlTime, int fouls) {
+        this.fighterId = fighterId;
+        this.fightId = fightId;
         this.punchesAttempted = punchesAttempted;
         this.punchesLanded = punchesLanded;
         this.kicksAttempted = kicksAttempted;
@@ -77,28 +59,20 @@ public class Statistics {
         this.fouls = fouls;
     }
 
-    public Long getId() {
-        return id;
+    public Long getFighterId() {
+        return fighterId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setFighterId(Long fighterId) {
+        this.fighterId = fighterId;
     }
 
-    public Fighter getFighter() {
-        return fighter;
+    public Long getFightId() {
+        return fightId;
     }
 
-    public void setFighter(Fighter fighter) {
-        this.fighter = fighter;
-    }
-
-    public Fight getFight() {
-        return fight;
-    }
-
-    public void setFight(Fight fight) {
-        this.fight = fight;
+    public void setFightId(Long fightId) {
+        this.fightId = fightId;
     }
 
     public int getPunchesAttempted() {

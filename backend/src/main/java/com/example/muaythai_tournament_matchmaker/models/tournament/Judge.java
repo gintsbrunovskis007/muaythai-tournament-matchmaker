@@ -3,7 +3,7 @@ package com.example.muaythai_tournament_matchmaker.models.tournament;
 import java.util.ArrayList;
 
 import com.example.muaythai_tournament_matchmaker.models.fight.Fight;
-import com.example.muaythai_tournament_matchmaker.models.fight.Scorecard;
+import com.example.muaythai_tournament_matchmaker.models.fight.ScoreCard;
 import com.example.muaythai_tournament_matchmaker.models.fighter.Identity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -36,7 +36,7 @@ public class Judge {
     private List<Fight> fights = new ArrayList<>();
 
     @OneToMany(mappedBy = "judge")
-    private List<Scorecard> scorecards = new ArrayList<>();
+    private List<ScoreCard> scorecards = new ArrayList<>();
 
     @Column(length = 500)
     private String profilePicture;
@@ -47,7 +47,7 @@ public class Judge {
 
     public Judge(){};
 
-    public Judge(Long id, Identity identity, List<Event> events, List<Fight> fights, List<Scorecard> scorecards, String profilePicture, Integer yearsOfExperience) {
+    public Judge(Long id, Identity identity, List<Event> events, List<Fight> fights, List<ScoreCard> scorecards, String profilePicture, Integer yearsOfExperience) {
         this.id = id;
         this.identity = identity;
         this.events = events;
@@ -77,7 +77,7 @@ public class Judge {
         fights.remove(fight);
     }
 
-    public void addScorecard(Scorecard scorecard) {
+    public void addScorecard(ScoreCard scorecard) {
         scorecards.add(scorecard);
         scorecard.setJudge(this);
         if (scorecard.getFight() != null && !fights.contains(scorecard.getFight())) {
@@ -85,7 +85,7 @@ public class Judge {
         }
     }
 
-    public void removeScorecard(Scorecard scorecard) {
+    public void removeScorecard(ScoreCard scorecard) {
         scorecards.remove(scorecard);
         scorecard.setJudge(null);
     }
@@ -134,11 +134,11 @@ public class Judge {
         this.fights = fights;
     }
 
-    public List<Scorecard> getScorecards() {
+    public List<ScoreCard> getScorecards() {
         return scorecards;
     }
 
-    public void setScorecards(List<Scorecard> scorecards) {
+    public void setScorecards(List<ScoreCard> scorecards) {
         this.scorecards = scorecards;
     }
 
